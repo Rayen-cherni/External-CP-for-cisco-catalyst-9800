@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>External CP for Catalyst 9800 </title>
+    <script src="script.js" defer></script>
+</head>
+
+<body class="animated fadeInUp">
+
+    <div class="bg"> <!---Background color -->
+
+        <div class="container-fluid padding "><!--- page content -->
+            <div class="row padding">
+                <div class="col-md-12 col-lg-6">
+
+                    <div class="card mx-auto" style="width: 350px;"> <!--Form container-->
+                        <div class="card-body px-lg-5 pt-0"><!--Form content-->
+                            <!-- Form -->
+                            <form class="text-center" style="color: #757575;" method="post">
+                                <input TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" value="0">
+                                <input TYPE="hidden" NAME="redirect_url" SIZE="255" MAXLENGTH="255" VALUE="http://www.google.tn">
+                                <input TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" value="0">
+                                <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+                                    type="button" onclick="submitAction();">Sign in</button>
+                                <div style="margin-top: 8px; font-size: 12px; color: #666;">
+                                    Submission attempts are logged locally to success.log / error.log.
+                                </div>
+                            </form> <!-- End FORM -->
+                            <div style="margin-top: 16px; text-align: left;">
+                                <strong>Query Params</strong>
+                                <div id="query-params" style="margin-top: 8px; font-size: 14px; color: #333;"></div>
+                            </div>
+                        </div><!-- End Form content-->
+                    </div><!--Form container-->
+                </div>
+            </div>
+        </div><!--- End page content -->
+    </div><!---End background color -->
+
+</body>
+
+</html>
