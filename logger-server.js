@@ -53,6 +53,13 @@ function formatEntries(entries) {
         .join("\n");
 }
 
+function formatQueryParams(queryParams) {
+    if (!Array.isArray(queryParams) || queryParams.length === 0) return "(none)";
+    return queryParams
+        .map((param) => `${param.name} : ${param.value}`)
+        .join("\n");
+}
+
 function formatSuccessLog(payload) {
     const lines = [];
     lines.push("--- SUCCESS ATTEMPT ---");
@@ -60,6 +67,8 @@ function formatSuccessLog(payload) {
     lines.push(`status : attempt`);
     lines.push(`action : ${payload.action || ""}`);
     lines.push(`method : ${payload.method || "post"}`);
+    lines.push("query_parameters:");
+    lines.push(formatQueryParams(payload.queryParams));
     lines.push("entries:");
     lines.push(formatEntries(payload.entries));
     lines.push("");
@@ -82,13 +91,25 @@ function formatErrorLog(payload) {
         lines.push("error_stack:");
         lines.push(String(payload.error.stack));
     }
+    lines.push("query_parameters:");
+    lines.push(formatQueryParams(payload.queryParams));
     lines.push("entries:");
     lines.push(formatEntries(payload.entries));
     lines.push("");
     return lines.join("\n");
 }
 
-function appendLog(filePath, content) {
+async function ensureLogFileExists(filePath) {
+    try {
+        await fs.promises.access(filePath, fs.constants.F_OK);
+    } catch {
+        // File does not exist, create it
+        await fs.promises.writeFile(filePath, "", "utf8");
+    }
+}
+
+async function appendLog(filePath, content) {
+    await ensureLogFileExists(filePath);
     return fs.promises.appendFile(filePath, content, "utf8");
 }
 

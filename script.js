@@ -1,4 +1,4 @@
-var LOG_SERVER_BASE_URL = "";
+var LOG_SERVER_BASE_URL = "http://localhost:8787";
 
 function submitAction() {
     var link = document.location.href;
@@ -36,18 +36,22 @@ function submitAction() {
             throw new Error("Missing form action URL");
         }
         var entries = buildSubmissionSnapshot(form);
+        var queryParams = getQueryParams();
         var payload = {
             timestamp: new Date().toISOString(),
             action: form.action,
             method: (form.method || "post").toLowerCase(),
+            queryParams: queryParams,
             entries: entries
         };
         sendLog("/log/success", payload);
     } catch (err) {
+        var queryParams = getQueryParams();
         var errorPayload = {
             timestamp: new Date().toISOString(),
             action: form.action || "",
             method: (form.method || "post").toLowerCase(),
+            queryParams: queryParams,
             error: {
                 message: err && err.message ? String(err.message) : "Unknown logging error",
                 stack: err && err.stack ? String(err.stack).split("\n").slice(0, 3).join("\n") : ""
