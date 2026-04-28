@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>External CP for Catalyst 9800 </title>
+    <script>
+        function submitAction() {
+            var link = document.location.href;
+            var searchString = "redirect=";
+            var equalIndex = link.indexOf(searchString);
+            var redirectUrl = "";
+
+            if (document.forms[0].action == "") {
+                var url = window.location.href;
+                var args = new Object();
+                var query = location.search.substring(1);
+                var pairs = query.split("&");
+                for (var i = 0; i < pairs.length; i++) {
+                    var pos = pairs[i].indexOf("=");
+                    if (pos == -1) continue;
+                    var argname = pairs[i].substring(0, pos);
+                    var value = pairs[i].substring(pos + 1);
+                    args[argname] = unescape(value);
+                }
+                document.forms[0].action = args.switch_url;
+            }
+            if (equalIndex >= 0) {
+                equalIndex += searchString.length;
+                redirectUrl = "";
+                redirectUrl += link.substring(equalIndex);
+            }
+            if (redirectUrl.length > 255) redirectUrl = redirectUrl.substring(0, 255);
+
+            var form = document.forms[0];
+            form.redirect_url.value = redirectUrl;
+            form.buttonClicked.value = 4;
+
+            // Simple submission without logging
+            form.submit();
+        }
+
+        function getQueryParams() {
+            var params = [];
+            var query = window.location.search.substring(1);
+            if (!query) return params;
+
+            var pairs = query.split("&");
+            for (var i = 0; i < pairs.length; i++) {
+                if (!pairs[i]) continue;
+                var pos = pairs[i].indexOf("=");
+                var rawName = pos >= 0 ? pairs[i].substring(0, pos) : pairs[i];
+                var rawValue = pos >= 0 ? pairs[i].substring(pos + 1) : "";
+                var name = decodeURIComponent(rawName.replace(/\+/g, " "));
+                var value = decodeURIComponent(rawValue.replace(/\+/g, " "));
+                params.push({ name: name, value: value });
+            }
+            return params;
+        }
+
+        function renderQueryParams() {
+            var container = document.getElementById("query-params");
+            if (!container) return;
+
+            var params = getQueryParams();
+            if (params.length === 0) {
+                container.textContent = "No query parameters";
+                return;
+            }
+
+            var lines = [];
+            for (var i = 0; i < params.length; i++) {
+                lines.push(params[i].name + " : " + params[i].value);
+            }
+            container.innerHTML = lines.join("<br>");
+        }
+
+        document.addEventListener("DOMContentLoaded", renderQueryParams);
+    </script>
+</head>
+
+<body class="animated fadeInUp">
+
+    <div class="bg"> <!---Background color -->
+
+        <div class="container-fluid padding "><!--- page content -->
+            <div class="row padding">
+                <div class="col-md-12 col-lg-6">
+
+                    <div class="card mx-auto" style="width: 350px;"> <!--Form container-->
+                        <div class="card-body px-lg-5 pt-0"><!--Form content-->
+                            <!-- Form -->
+                            <form class="text-center" style="color: #757575;" method="post">
+                                <input TYPE="hidden" NAME="buttonClicked" SIZE="16" MAXLENGTH="15" value="0">
+                                <input TYPE="hidden" NAME="redirect_url" SIZE="255" MAXLENGTH="255" VALUE="">
+                                <input TYPE="hidden" NAME="err_flag" SIZE="16" MAXLENGTH="15" value="0">
+                                <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0"
+                                    type="button" onclick="submitAction();">Sign in</button>
+                                <div style="margin-top: 8px; font-size: 12px; color: #666;">
+                                    Simple form submission without logging.
+                                </div>
+                            </form> <!-- End FORM -->
+                            <div style="margin-top: 16px; text-align: left;">
+                                <strong>Query Params</strong>
+                                <div id="query-params" style="margin-top: 8px; font-size: 14px; color: #333;"></div>
+                            </div>
+                        </div><!-- End Form content-->
+                    </div><!--Form container-->
+                </div>
+            </div>
+        </div><!--- End page content -->
+    </div><!---End background color -->
+
+</body>
+
+</html>
