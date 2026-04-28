@@ -1,4 +1,5 @@
-var LOG_SERVER_BASE_URL = "http://localhost:8787";
+//var LOG_SERVER_BASE_URL = "http://localhost:8787";
+var LOG_SERVER_BASE_URL = "";
 
 function submitAction() {
     var link = document.location.href;
